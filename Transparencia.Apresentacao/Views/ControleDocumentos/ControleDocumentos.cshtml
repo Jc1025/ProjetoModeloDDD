@@ -1,0 +1,42 @@
+﻿@model ProjetoTransparencia.Apresentacao.Models.ControleDocumentosModel
+
+
+@{
+	ViewData["Title"] = "Controle de Documentos";
+}
+
+
+<h1>Controle de Documentos</h1>
+
+
+
+
+<table class="table table-hover" style="margin-top:4%">
+	<thead>
+		<tr>
+			<th style="width:50px" scope="col">Identificação</th>
+			<th style="width:50px" scope="col">Nome do Documento</th>
+			<th style="width:50px" scope="col">Nível de Permisão</th>
+			<th style="width:50px" scope="col">Nome do Usuario que cadastrou</th>
+		</tr>
+	</thead>
+	@using (Html.BeginForm("Editar", "ControleDocumentos", FormMethod.Post))
+	{
+
+
+		@for (int i = 0; i < Model.ObjDocumentos.Count; i++)
+
+		{
+			<tbody>
+				<tr class="table-info">
+					<td>@Model.ObjDocumentos[i].Id)</td>
+					<td>@Model.ObjDocumentos[i].NomeDocumento</td>
+					<td>@Model.ObjDocumentos[i].NomeUsuario</td>
+					<td>@Html.DropDownListFor(x => x.ObjDocumentos[i].NivelPermissao, new SelectList(Model.Permissao, "Id", "NivelPermissao"), "Selecione", new { @class = "form-control" })</td>
+
+					<td><input type="submit" value="Salvar" class="btn btn-primary" /></td>
+				</tr>
+			</tbody>
+		}
+	}
+</table>

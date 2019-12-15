@@ -1,0 +1,36 @@
+﻿@model ProjetoTransparencia.Apresentacao.Models.ControleUsuariosModel
+
+@{
+	ViewData["Title"] = "ControleUsuarios";
+}
+
+<h1>Controle de Usuarios</h1>
+<table class="table table-hover" style="margin-top:4%">
+	<thead>
+		<tr>
+			<th></th>
+			<th style="width:50px" scope="col">Login</th>
+			<th style="width:50px" scope="col">Empresa</th>
+			<th scope="col">Email</th>
+			<th style="width:250px" scope="col">Nivel de Permissão</th>
+			<th style="width:50px" scope="col">Alterar</th>
+		</tr>
+	</thead>
+	@using (Html.BeginForm("Editar", "ControleUsuarios", FormMethod.Post))
+	{
+
+		@for (int i = 0; i < Model.Usuarios.Count; i++)
+		{
+			<tbody>
+				<tr class="table-info">
+					<td>@Html.HiddenFor(x => x.Usuarios[i].Id)</td>
+					<td>@Model.Usuarios[i].LoginUsuario</td>
+					<td>@Model.Usuarios[i].EmpresaUsuario</td>
+					<td>@Model.Usuarios[i].EmailUsuario</td>
+					<td>@Html.DropDownListFor(x => x.Usuarios[i].Id, new SelectList(Model.Permissao, "Id", "NivelPermissao"), "Selecione", new { @class = "form-control" })						</td>
+					<td><input type="submit" value="Salvar" class="btn btn-primary" /></td>
+				</tr>
+			</tbody>
+		}
+	}
+</table>

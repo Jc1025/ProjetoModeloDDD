@@ -1,0 +1,56 @@
+﻿@model ProjetoTransparencia.Apresentacao.Models.UsuarioModel
+
+@{
+	ViewData["Title"] = "AlterarDados";
+}
+
+<h1>Alterar Dados</h1>
+
+@using (Html.BeginForm("Editar", "AlterarDados", FormMethod.Post))
+{
+	@Html.HiddenFor(x => x.Usuario.Id)
+	<div class="col-12">
+		@Html.TextBoxFor(x => x.Usuario.LoginUsuario, new { placeholder = "Login", @class = "input-layout" })
+	</div>
+	<div class="col-12">
+		@Html.TextBoxFor(x => x.Usuario.EmailUsuario, new { placeholder = "Email", @class = "input-layout" })
+	</div>
+	<div class="col-12">
+		@Html.TextBoxFor(x => x.Usuario.SenhaUsuario, new { placeholder = "Senha", @class = "input-layout" })
+	</div>
+	<div class="col-12">
+		@Html.TextBoxFor(x => x.Usuario.EmpresaUsuario, new { placeholder = "Empresa", @class = "input-layout" })
+	</div>
+	<div class='col-sm-12'>
+		@Html.EditorFor(x => x.Usuario.DataNascimento, "{0:MM/dd/yyyy}", new { @class = "input-layout" })
+	</div>
+	<div>
+		<img id="idBlah" src="data:image;base64,@System.Convert.ToBase64String(Model.Usuario.ImagemUsuario)" width="80" height="80" />
+	</div>
+	<div class="col-sm-12">
+		<input type="file" class="text-center" value="Upload de Fotos" onchange="readURL(this);" />
+	</div>
+		@Html.HiddenFor(x => x.Imagem, new { id = "imagem" })
+	<div class="col-12">
+		@Html.DropDownListFor(x => x.Usuario.IdPermissao, new SelectList(Model.Permissao, "ID_PERMISSAO", "NIVEL_PERMISSAO"), "Selecione", new { @class = "form-control" })
+	</div>
+	<input type="submit" value="Editar" class="btn btn-primary" />
+}
+
+<script>
+	function readURL(input) {
+		debugger
+		if (input.files && input.files[0]) {
+			var reader = new FileReader();
+			reader.onload = function (e) {
+				$('#idBlah')
+					.attr('src', e.target.result)
+					.width(150)
+					.height(200);
+				$('#imagem').val(e.target.result)
+			};
+			reader.readAsDataURL(input.files[0]);
+		}
+	}
+</script>
+

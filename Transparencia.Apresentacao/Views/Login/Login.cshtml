@@ -1,0 +1,158 @@
+﻿@model Transparencia.Domain.Entidades.Usuario
+
+@{
+	ViewBag.Title = "Login";
+
+}
+
+
+@using (Html.BeginForm("Login", "Login", FormMethod.Post))
+{
+
+	<body>
+		<div id="idLogo" class="text-center">
+			<img src="Imagens/logo.png" class="Logo" />
+		</div>
+
+		<div id="idMenuLogin">
+			<div id="idLoginAcessos" class="text-center">
+				<div id="idCampos" class="CamposLogin">
+					<div class="col-12">
+						@Html.TextBoxFor(a => a.LoginUsuario, new { placeholder = "Login", @class = "input-layout"})
+					</div>
+					<div class="col-12">
+						@Html.PasswordFor(a => a.SenhaUsuario, new { placeholder = "Senha", @class = "input-layout" })
+					</div>
+				</div>
+				<div id="idLoginBotoes">
+					<div class="col-12">
+						<input type="submit" class="btn btn-primary btn-layout" value="Login" />
+					</div>
+					<div class="col-12">
+						<input type="button" class="btn btn-primary btn-layout" id="idCadastro" value="Cadastro" />
+					</div>
+				</div>
+			</div>
+			<div id="idEsqueceuSenha">
+				<div class="text-center">
+					<label class="mt-3"> Esqueceu sua senha? Recupere ela <a href="#">aqui</a></label>
+				</div>
+			</div>
+		</div>
+
+		<div id="idMenuCadastro" class="col-md-12 text-center" style="display:none">
+			<div class="col-12">
+				<input type="text" id="inputIdLogin" placeholder="Login" />
+			</div>
+			<div class="col-12">
+				<input type="text" id="idEmail" placeholder="Email" />
+			</div>
+			<div class="col-12">
+				<input type="text" id="idSenha" placeholder="Senha" />
+			</div>
+			<div class="col-12">
+				<input type="text" id="idEmpresa" placeholder="Empresa" />
+			</div>
+			<div class="col-12">
+				<input type="text" id="idDataNascimento" placeholder="Data de Nascimento" />
+			</div>
+
+
+			<div class="col-sm-12">
+				<div class="mt-3 mb-3">
+					<input type="checkbox" id="chkTermo" />
+					<label for="chkTermo">Aceito os termos de responsabilidade de informações contidas aqui</label>
+				</div>
+			</div>
+			<div class="col-12">
+				<input type="button" id="idBotaoProximo" class="btn btn-primary btn-layout" disabled value="Proximo" />
+			</div>
+		</div>
+
+		<div id="idFotoPerfil" class="col-md-12" style="display:none">
+			<div class="text-center">
+				<label class="mt-3 mb-3 col-12">Foto de Perfil</label>
+
+				<img id="idBlah" src="#" alt="" style="display:none" />
+				<canvas id="idCanvas" class="mt-3 mb-3"></canvas>
+
+				<div class="col-sm-12">
+					<input type="file" class="text-center" value="Upload de Fotos" onchange="readURL(this);" />
+				</div>
+				<input type="button" id="idConfirmaCadastro" value="Confirmar" />
+			</div>
+		</div>
+
+		}
+
+		<script>
+
+			$('#idCadastro').click(function () {
+				$('#idMenuLogin').fadeOut()
+				$('#idMenuCadastro').fadeIn()
+
+			})
+
+			$('#idBotaoProximo').click(function () {
+				$('#idMenuCadastro').fadeOut()
+				$('#idFotoPerfil').fadeIn()
+			})
+
+			$('#idConfirmaCadastro').click(function () {
+				debugger
+				let Login = $('#inputIdLogin').val()
+				let Email = $('#idEmail').val()
+				let Senha = $('#idSenha').val()
+				let Empresa = $('#idEmpresa').val()
+				let DataNascimento = $('#idDataNascimento').val()
+				let Imagem = document.getElementById("idBlah").src
+				let Cadastro = { Login: Login, Email: Email, Senha: Senha, Empresa: Empresa, DataNascimento: DataNascimento, Imagem: Imagem }
+
+				$.ajax({
+					url: "/Login/Cadastro",
+					type: "POST",
+					contentType: "application/json",
+					data: JSON.stringify(Cadastro),
+					success: function () {
+						$.growl.notice({ message: "Novo usuario cadastrado!!" });
+						$('#idFotoPerfil').fadeOut()
+						$('#idMenuLogin').fadeIn()
+						$("#chkTermo").prop('checked', false)
+						$("#idBotaoProximo").prop('disabled', true);
+					},
+					error: function () {
+						alert("Erro ao processar requisicao");
+					}
+				});
+
+			})
+
+			function readURL(input) {
+				if (input.files && input.files[0]) {
+					var reader = new FileReader();
+					reader.onload = function (e) {
+						$('#idBlah')
+							.attr('src', e.target.result)
+							.width(150)
+							.height(200);
+					};
+
+					$('#idCanvas').hide()
+					$('#idBlah').show()
+					reader.readAsDataURL(input.files[0]);
+				}
+			}
+
+			$('#chkTermo').click(function () {
+				if ($("#chkTermo").prop('checked') == true) {
+					$("#idBotaoProximo").prop('disabled', false);
+				}
+				else {
+					$("#idBotaoProximo").prop('disabled', true);
+				}
+			})
+
+		</script>
+	</body>
+
+}
